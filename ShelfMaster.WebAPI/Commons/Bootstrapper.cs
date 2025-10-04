@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ShelfMaster.Application.Commons;
 using ShelfMaster.Application.Mapping;
 using ShelfMaster.Infrastructure.Commons;
-using ShelfMaster.Infrastructure.DbContext;
-using ShelfMaster.Infrastructure.Entities;
+using System.Security.Claims;
+using System.Text;
 
 namespace ShelfMaster.WebAPI.Commons;
 
@@ -16,15 +16,27 @@ public static class Bootstrapper
         service.ApplicationRegister();
         service.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-        service.AddIdentity<ApplicationUser, IdentityRole<int>>(x =>
+        service.AddAuthentication(x =>
         {
-            x.Password.RequireDigit = false;
-            x.Password.RequiredLength = 8;
-            x.Password.RequireUppercase = false;
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
-
+            .AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["JWT : Issuer"],
+                    ValidAudience = configuration["JWT : Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(configuration["JWT : Key"])),
+                    NameClaimType = ClaimTypes.Name,
+                    RoleClaimType = ClaimTypes.Role
+                };
+            });
 
         return service;
     }

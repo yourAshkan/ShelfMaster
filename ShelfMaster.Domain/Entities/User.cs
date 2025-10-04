@@ -18,4 +18,12 @@ public class User
     {
 
     }
+
+    public void UpdateProfile(string newfirstname, string newlastname, string newemail, string phonenumber)
+    {
+        FirstName = newfirstname;
+        LastName = newlastname;
+        PhoneNumber = phonenumber;
+        Email = newemail;
+    }
 }

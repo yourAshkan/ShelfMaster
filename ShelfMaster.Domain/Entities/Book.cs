@@ -11,7 +11,7 @@ public class Book
     public bool IsAvailable { get; set; } = true;
     public bool IsDeleted { get; set; } = false;
 
-    public List<Loan>? Loan { get; set; }
+    public List<Loan>? Loans { get; set; }
 
 
     public Book()

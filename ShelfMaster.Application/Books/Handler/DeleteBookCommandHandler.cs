@@ -12,7 +12,7 @@ public class DeleteBookCommandHandler(IBookRepository _repo) : IRequestHandler<D
         {
             var book = await _repo.GetByIdAsync(request.Id);
             if (book == null)
-                return false;
+                throw new Exception("Book not Found!");
 
             await _repo.DeleteAsync(book.Id);
             return true;

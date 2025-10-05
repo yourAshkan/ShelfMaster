@@ -10,4 +10,7 @@ public class CreateBookCommand(string title, string author, string description, 
     public string? Description { get; set; }
     public string? ImageURL { get; set; }
     public int AvailabeCount { get; set; }
+    public int UserId { get; set; }
+
+    public void SetUserId(int userId) => UserId = userId;
 }

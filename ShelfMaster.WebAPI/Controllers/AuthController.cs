@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using ShelfMaster.Application.DTOs;
 using ShelfMaster.Infrastructure.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,7 +12,7 @@ namespace ShelfMaster.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(UserManager<ApplicationUser> userManager, IConfiguration config, SignInManager<ApplicationUser> signInManager, IMapper mapper) : ControllerBase
+    public class AuthController(UserManager<ApplicationUser> userManager, IConfiguration config, SignInManager<ApplicationUser> signInManager, IMapper _mapper) : ControllerBase
     {
         #region GenerateJwtToken
         private async Task<string> GenerateJwtToken(ApplicationUser user)
@@ -48,6 +48,51 @@ namespace ShelfMaster.WebAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token); 
         }
-            #endregion
+        #endregion
+
+        #region SignUP
+        [HttpPost("SignUp")]
+        public async Task<IActionResult> SignUp(RegisterDto dto)
+        {
+            var user = new ApplicationUser
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+            };
+
+            var result = await userManager.CreateAsync(user, dto.Password);
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            await userManager.AddToRoleAsync(user, "User");
+
+            return Ok("Registration was successful.");
+        }
+        #endregion
+
+        #region Login
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDto dto)
+        {
+            var user = await userManager.FindByNameAsync(dto.Email);
+            if (user == null)
+                return Unauthorized("User Not Found!");
+
+            var result = await signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
+            if (!result.Succeeded)
+                return Unauthorized("Email or Password is Wrong!");
+
+            var role = await userManager.GetRolesAsync(user);
+            var token = await GenerateJwtToken(user);
+
+            return Ok(new AuthResponseDto
+            {
+                Token = token,
+                Expiration = DateTime.UtcNow.AddHours(2)
+            });
+        } 
+        #endregion
     }
 }

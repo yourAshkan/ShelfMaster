@@ -2,7 +2,7 @@
 
 namespace ShelfMaster.Application.Books.Command;
 
-public class DeleteBookCommand : IRequest<bool>
+public class DeleteBookCommand(int id) : IRequest<bool>
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = id;
 }

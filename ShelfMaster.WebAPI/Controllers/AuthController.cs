@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -52,6 +53,7 @@ namespace ShelfMaster.WebAPI.Controllers
 
         #region SignUP
         [HttpPost("SignUp")]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp(RegisterDto dto)
         {
             var user = new ApplicationUser
@@ -68,12 +70,14 @@ namespace ShelfMaster.WebAPI.Controllers
 
             await userManager.AddToRoleAsync(user, "User");
 
-            return Ok("Registration was successful.");
+            var token = GenerateJwtToken(user);
+            return Ok(new { token });
         }
         #endregion
 
         #region Login
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDto dto)
         {
             var user = await userManager.FindByNameAsync(dto.Email);

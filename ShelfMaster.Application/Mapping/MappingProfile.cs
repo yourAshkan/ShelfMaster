@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ShelfMaster.Application.Books.Command;
 using ShelfMaster.Application.DTOs;
 using ShelfMaster.Domain.Entities;
 
@@ -9,6 +10,13 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Book,BookDto>().ReverseMap();
+
+        CreateMap<CreateBookCommand, Book>()
+              .ForMember(dest => dest.Id, opt => opt.Ignore())
+              .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+              .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.AvailabeCount > 0))
+              .ForMember(dest => dest.Loans, opt => opt.Ignore());
+
 
         CreateMap<User,UserDto>().ReverseMap();
 

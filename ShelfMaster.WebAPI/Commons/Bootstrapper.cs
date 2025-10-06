@@ -7,6 +7,7 @@ using ShelfMaster.Infrastructure.Commons;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace ShelfMaster.WebAPI.Commons;
 
 public static class Bootstrapper
@@ -16,7 +17,7 @@ public static class Bootstrapper
     {
         service.ContextRegister(configuration);
         service.ApplicationRegister();
-        service.AddAutoMapper(typeof(MappingProfile).Assembly);
+        service.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
         service.AddAuthentication(x =>
         {
@@ -31,10 +32,10 @@ public static class Bootstrapper
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["JWT : Issuer"],
-                    ValidAudience = configuration["JWT : Audience"],
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["JWT : Key"])),
+                        Encoding.UTF8.GetBytes(configuration["JWT:Key"])),
                     NameClaimType = ClaimTypes.Name,
                     RoleClaimType = ClaimTypes.Role
                 };

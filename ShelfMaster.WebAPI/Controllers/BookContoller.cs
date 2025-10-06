@@ -42,8 +42,6 @@ namespace ShelfMaster.WebAPI.Controllers
             if (userIdClaim == null)
                 return Unauthorized();
 
-            command.SetUserId(int.Parse(userIdClaim));
-
             var book = await _mediator.Send(command);
             return Ok(book);
         }
@@ -71,16 +69,16 @@ namespace ShelfMaster.WebAPI.Controllers
         #region DeleteBook
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete([FromBody] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(userIdClaim))
                 throw new Exception("User ID Not Found!");
 
-            var currentUserId = int.Parse(userIdClaim);
+            //var currentUserId = int.Parse(userIdClaim);
 
-            var result = await _mediator.Send(new DeleteBookCommand(currentUserId));
+            var result = await _mediator.Send(new DeleteBookCommand(id));
 
             if (!result)
                 return BadRequest("You dont have permission to access!");

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShelfMaster.Application.Books.Command;
 using ShelfMaster.Application.Loans.Command;
 using ShelfMaster.Application.Loans.Query;
 using System.Security.Claims;
@@ -9,10 +10,9 @@ namespace ShelfMaster.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class LoanContoller(IMediator _mediator) : ControllerBase
     {
-        #region GetAll
+        #region GetAllLoan
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
@@ -22,30 +22,20 @@ namespace ShelfMaster.WebAPI.Controllers
         }
         #endregion
 
-        #region GetById
-        [HttpGet("{id:int}")]
-        [Authorize(Roles = "Admin,User")]
-        public async Task<IActionResult> GetById(int id)
+        #region GetLoanById
+        [HttpGet("UserLoan")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetLoansByUser(int? id = null)
         {
-            var loan = _mediator.Send(new GetLoanByIdQuery(id));
-            if (loan == null)
-                return NotFound("Loan Not Found!");
-
-            if (User.IsInRole("User"))
-            {
-                var userid = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-                if (loan.Id == userid)
-                    return Forbid("You are not allowed to access this loan!");
-            }
-
-            return Ok(loan);
+            var loans = await _mediator.Send(new GetLoansByUserQuery(id));
+            return Ok(loans);
         }
         #endregion
 
-        #region CreateLoan
-        [HttpPost]
+        #region LoanBook
+        [HttpPost("LoanBook")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Create([FromBody] CreateLoanCommand command)
+        public async Task<IActionResult> LoanBook([FromBody] CreateLoanCommand command)
         {
             var userid = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             command.UserId = userid;
@@ -58,30 +48,14 @@ namespace ShelfMaster.WebAPI.Controllers
         }
         #endregion
 
-        #region UpdateLoan
-        [HttpPut("{id:int}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateLoanCommand command)
+        #region ReturnBook
+        [HttpPut("ReturnBook/{loanId}")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> ReturnBook(int loanId)
         {
-            if (id != command.Id)
-                return BadRequest("Id mismatch!");
-
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new ReturnBookCommand(loanId));
             return Ok(result);
         }
-        #endregion
-
-        #region DeleteLoan
-        [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await _mediator.Send(new DeleteLoanCommand(id));
-            if (!result)
-                return NotFound("Loan Not Found!");
-
-            return Ok("Loan deleted successfully!");
-        } 
         #endregion
     }
 }

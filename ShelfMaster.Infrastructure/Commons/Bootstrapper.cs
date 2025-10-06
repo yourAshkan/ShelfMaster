@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShelfMaster.Application.Interfasces;
 using ShelfMaster.Domain.IRepository;
 using ShelfMaster.Infrastructure.DbContext;
 using ShelfMaster.Infrastructure.Entities;
@@ -28,6 +29,7 @@ public static class Bootstrapper
 
         service.AddScoped<IBookRepository,BookRepository>();
         service.AddScoped<ILoanRepository,LoanRepository>();
+        service.AddScoped<IUserService, UserService>();
 
         return service;
     }

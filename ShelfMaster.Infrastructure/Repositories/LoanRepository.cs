@@ -44,8 +44,7 @@ public class LoanRepository(AppDbContext _context) : ILoanRepository
     public async Task<List<Loan>> GetAllAsync()
     {
         return await _context.Loans
-            .Include(x=>x.UserId)
-            .Include(x=> x.BookId)
+            .Include(x => x.Book)
             .Where(x => !x.IsDeleted)
             .ToListAsync();
     }
@@ -55,9 +54,18 @@ public class LoanRepository(AppDbContext _context) : ILoanRepository
     public async Task<Loan?> GetByIdAsync(int id)
     {
         return await _context.Loans
-            .Include(x=>x.UserId)
-            .Include(x=>x.BookId)
+            .Include(x => x.Book)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
     }
+    #endregion
+
+    #region GetAllByUserId
+    public async Task<List<Loan?>> GetAllByUserIdAsync(int id)
+    {
+        return await _context.Loans
+            .Include(x => x.Book)
+            .Where(x => x.UserId == id && !x.IsDeleted)
+            .ToListAsync();
+    } 
     #endregion
 }

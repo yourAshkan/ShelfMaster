@@ -35,13 +35,13 @@ namespace ShelfMaster.WebAPI.Controllers
             }
 
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT : Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
 
             var token = new JwtSecurityToken(
-                issuer: config["JWT : Issuer"],
-                audience: config["JWT : Audience"],
+                issuer: config["JWT:Issuer"],
+                audience: config["JWT:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(2),
                 signingCredentials: creds
@@ -58,9 +58,11 @@ namespace ShelfMaster.WebAPI.Controllers
         {
             var user = new ApplicationUser
             {
+                UserName = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
             };
 
             var result = await userManager.CreateAsync(user, dto.Password);

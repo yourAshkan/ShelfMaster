@@ -13,9 +13,12 @@ namespace ShelfMaster.Application.Books.Handler
         {
             try
             {
-                var book = _mapper.Map<Book>(request.Id);
+                var book = await _repo.GetByIdAsync(request.Id);
+                if (book == null)
+                    throw new Exception("Book Not Found!");
 
-                book.Edit(request.Title, request.Author, request.Description, request.ImageURL);
+
+                book.Edit(request.Title, request.Author, request.ImageURL, request.Description);
                 await _repo.UpdateAsync(book);
                 return _mapper.Map<BookDto>(book);
             }

@@ -18,6 +18,10 @@ public class CreateBookCommandHandler(IBookRepository _repo,IMapper _mapper) : I
 			await _repo.AddAsync(book);
 			return _mapper.Map<BookDto?>(book);
 		}
+		catch (AutoMapperMappingException ex)
+		{
+            throw new Exception("❌ AutoMapper mapping error. Make sure CreateBookCommand → Book is configured properly.", ex);
+        }
 		catch (Exception ex)
 		{
 			throw new Exception("Erorr!", ex);

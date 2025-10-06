@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShelfMaster.Application\ShelfMaster.Application.csproj" />
     <ProjectReference Include="..\ShelfMaster.Domain\ShelfMaster.Domain.csproj" />
   </ItemGroup>
 

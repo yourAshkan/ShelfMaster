@@ -88,6 +88,8 @@ public static class Bootstrapper
 
         app.UseHttpsRedirection();
 
+        app.UseStaticFiles();
+
         app.UseAuthentication();
 
         app.UseAuthorization();

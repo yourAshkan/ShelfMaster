@@ -8,7 +8,7 @@ namespace ShelfMaster.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookContoller(IMediator _mediator) : ControllerBase
+    public class BookController(IMediator _mediator) : ControllerBase
     {
         #region GetAll
         [HttpGet("GetAll")]

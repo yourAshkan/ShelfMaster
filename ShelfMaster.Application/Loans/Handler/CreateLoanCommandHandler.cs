@@ -21,7 +21,7 @@ public class CreateLoanCommandHandler(ILoanRepository _repoLoan,IBookRepository 
             if (book == null || book.IsDeleted)
                 throw new Exception("Book Not Found!");
 
-            if (book.AvailabeCount <= 0)
+            if (book.AvailableCount <= 0)
                 throw new Exception("This Book is not Available:(");
 
             var loan = new Loan
@@ -33,7 +33,7 @@ public class CreateLoanCommandHandler(ILoanRepository _repoLoan,IBookRepository 
             };
 
             await _repoLoan.AddAsync(loan);
-            book.AvailabeCount -=1;
+            book.AvailableCount -= 1;
             await _repoBook.UpdateAsync(book);
 
             var userEmail = await _userService.GetGetUserNameByIdAsync(request.UserId ?? 0);

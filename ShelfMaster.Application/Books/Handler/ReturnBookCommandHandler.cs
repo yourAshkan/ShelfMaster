@@ -31,7 +31,7 @@ public class ReturnBookCommandHandler(IBookRepository _repoBook,ILoanRepository 
             await _repoBook.UpdateAsync(book);
             await _repoLoan.UpdateAsync(loan);
 
-            book.AvailabeCount++;
+            book.AvailableCount++;
 
             var userEmail = loan.UserId.HasValue ? await _userService.GetGetUserNameByIdAsync(loan.UserId.Value) : null;
 

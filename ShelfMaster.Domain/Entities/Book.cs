@@ -7,7 +7,8 @@ public class Book
     public string Author { get; private set; }
     public string? ImageURL { get; private set; }
     public string? Description { get; private set; }
-    public int AvailabeCount { get; set; }
+    public int AvailableCount { get; set; }
+
     public bool IsAvailable { get; set; } = true;
     public bool IsDeleted { get; set; } = false;
 

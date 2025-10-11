@@ -26,9 +26,3 @@
 
 حتما قبل از اجرا در مسیر ShelfMaster.Infrastructure با استفاده از دستور Add-Migration [MigrationName] و Update-Database در Package Management Console دیتابیس لوکال رو ایجاد کنید. 
 
-# تصاویر
-![پیش‌نمایش ShelfMaster](./Images/WebPreview1.png)
-
-![پیش‌نمایش ShelfMaster](./Images/WebPreview2.png)
-
-![پیش‌نمایش ShelfMaster](./Images/WebPreview3.png)

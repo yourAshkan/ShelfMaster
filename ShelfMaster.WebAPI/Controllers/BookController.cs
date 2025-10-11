@@ -34,7 +34,7 @@ namespace ShelfMaster.WebAPI.Controllers
         #endregion
 
         #region CreateBook
-        [HttpPost("CreateBook")]
+        [HttpPost("Create")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CreateBookCommand command)
         {
@@ -62,12 +62,12 @@ namespace ShelfMaster.WebAPI.Controllers
             if (book == null)
                 return NotFound();
 
-            return Ok("Book Updated.");
+            return Ok(new { message = "Book Updated Successfully." });
         }
         #endregion
 
         #region DeleteBook
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
@@ -83,7 +83,7 @@ namespace ShelfMaster.WebAPI.Controllers
             if (!result)
                 return BadRequest("You dont have permission to access!");
 
-            return Ok("Book Deleted!");
+            return Ok(new { message = "Book Deleted Successfully." });
         } 
         #endregion
     }

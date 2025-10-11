@@ -8,20 +8,17 @@
 </head>
 <body>
 
-    <!-- Header / Navbar -->
     <header class="navbar">
-        <div class="logo en">📚 ShelfMaster</div>
+        <div class="logo"> <h4>ShelfMaster</h4></div>
         <nav>
             <ul>
-                <li><a href="#">خانه</a></li>
-                <li><a href="#">کتاب‌ها</a></li>
-                <li><a href="#">ورود</a></li>
-                <li><a href="#">ثبت‌نام</a></li>
+                <li><a href="#books-section" id="explore-btn">کتاب‌ها</a></li>
+
+                <li id="dynamic-links-container" style="display:contents;"></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <h1>به کتابخانه <span class="en">ShelfMaster</span> خوش اومدی :)</h1>
@@ -30,15 +27,12 @@
         </div>
     </section>
 
-    <!-- Book List -->
     <section class="book-list">
         <h2>جدیدترین کتاب‌ها</h2>
         <div id="books-container" class="books-grid">
-            <!-- کتاب‌ها با AJAX از API بارگذاری می‌شن -->
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>© 2025 <span class="en">ShelfMaster</span> | ساخته‌شده با ❤️ توسط اشکان کیا</p>
     </footer>
@@ -49,22 +43,79 @@
             <h2 id="modal-title">ورود به ShelfMaster</h2>
 
             <form id="login-form" class="auth-form">
-                <input type="text" id="login-username" placeholder="نام کاربری" required>
+                <input type="email" id="login-email" placeholder="ایمیل" required>
                 <input type="password" id="login-password" placeholder="رمز عبور" required>
                 <button type="submit">ورود</button>
             </form>
 
             <form id="signin-form" class="auth-form" style="display:none;">
-                <input type="text" id="signin-username" placeholder="نام کاربری" required>
+                <input type="text" id="signin-firstname" placeholder="نام" required>
+                <input type="text" id="signin-lastname" placeholder="نام خانوادگی" required>
                 <input type="email" id="signin-email" placeholder="ایمیل" required>
+                <input type="tel" id="signin-phone" placeholder="شماره تلفن همراه" required>
                 <input type="password" id="signin-password" placeholder="رمز عبور" required>
                 <button type="submit">ثبت‌نام</button>
             </form>
 
             <p class="switch-link">
-                <a href="#" id="switch-to-signin">ثبت‌نام نکرده‌ام</a> |
+                <a href="#" id="switch-to-signin">ثبت‌نام نکرده‌ام</a>
                 <a href="#" id="switch-to-login" style="display:none;">قبلاً ثبت‌نام کرده‌ام</a>
             </p>
+        </div>
+    </div>
+
+    <div id="dashboard-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="dashboard-title">حساب کاربری من</h2>
+
+            <div id="dashboard-content">
+                <p>در حال بارگذاری اطلاعات...</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="admin-title">پنل مدیریت کتابخانه</h2>
+
+            <div class="admin-tabs">
+                <button class="tab-button active" data-tab="book-management">مدیریت کتاب</button>
+                <button class="tab-button" data-tab="loan-management">مدیریت امانت‌ها</button>
+            </div>
+
+            <div id="book-management" class="tab-content active">
+                <h3>ایجاد / ویرایش کتاب</h3>
+                <form id="book-form">
+                    <input type="hidden" id="book-id">
+                    <input type="text" id="book-title-admin" placeholder="عنوان کتاب" required>
+                    <input type="text" id="book-author-admin" placeholder="نویسنده" required>
+                    <input type="text" id="book-imageurl-admin" placeholder="آدرس تصویر (اختیاری)">
+                    <input type="number" id="book-count-admin" placeholder="تعداد موجودی" required min="1">
+                    <textarea id="book-description-admin" placeholder="توضیحات" required></textarea>
+                    <button type="submit" id="submit-book-btn">ذخیره کتاب</button>
+                </form>
+                <hr>
+                <div id="admin-book-list">
+                    <h4>لیست کتاب‌های موجود (جهت ویرایش/حذف):</h4>
+                    <div id="admin-books-container"></div>
+                </div>
+            </div>
+
+            <div id="loan-management" class="tab-content">
+                <h3>مدیریت امانت‌ها</h3>
+                <div class="loan-filter">
+                    <input type="number" id="loan-user-id" placeholder="ID کاربر خاص (اختیاری)">
+                    <button id="load-all-loans-btn">بارگذاری تمام امانت‌ها</button>
+                    <button id="load-user-loans-btn">بارگذاری امانت‌های کاربر</button>
+                </div>
+                <div id="admin-loans-container">
+                </div>
+            </div>
+
+            <p id="admin-message" style="color: red;"></p>
         </div>
     </div>
 

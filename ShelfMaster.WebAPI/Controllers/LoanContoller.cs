@@ -10,10 +10,10 @@ namespace ShelfMaster.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoanContoller(IMediator _mediator) : ControllerBase
+    public class LoanController(IMediator _mediator) : ControllerBase
     {
         #region GetAllLoan
-        [HttpGet]
+        [HttpGet("GetAll")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {

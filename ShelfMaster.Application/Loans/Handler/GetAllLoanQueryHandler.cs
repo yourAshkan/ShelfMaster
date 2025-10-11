@@ -32,7 +32,7 @@ public class GetAllLoanQueryHandler(ILoanRepository _repo,IMapper _mapper,IUserS
                     UserEmail = userName,
                     BookId = loan.BookId,
                     BookTitle = loan.Book?.Title,
-                    Status = LoanStatus.Approved,
+                    Status = loan.Status,
                     LoanDate = loan.LoanDate,
                     ReturnDate = loan.ReturnDate,
                     IsDeleted = loan.IsDeleted

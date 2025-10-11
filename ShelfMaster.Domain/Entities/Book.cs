@@ -24,11 +24,12 @@ public class Book
     {
         IsDeleted = true;
     }
-    public void Edit(string newtilte, string author, string? imageURL, string? description)
+    public void Edit(string newtilte, string author, string? imageURL, string? description, int availablecount)
     {
         Title = newtilte;
         Author = author;
         ImageURL = imageURL;
         Description = description;
+        AvailableCount = availablecount;
     }
 }

@@ -71,7 +71,7 @@ namespace ShelfMaster.WebAPI.Controllers
 
             await userManager.AddToRoleAsync(user, "User");
 
-            var token = GenerateJwtToken(user);
+            var token = await GenerateJwtToken(user);
             return Ok(new { token });
         }
         #endregion
@@ -89,13 +89,15 @@ namespace ShelfMaster.WebAPI.Controllers
             if (!result.Succeeded)
                 return Unauthorized("Email or Password is Wrong!");
 
-            var role = await userManager.GetRolesAsync(user);
+            var isAdminUser = await userManager.IsInRoleAsync(user, "Admin");
+            //var role = await userManager.GetRolesAsync(user);
             var token = await GenerateJwtToken(user);
 
             return Ok(new AuthResponseDto
             {
                 Token = token,
-                Expiration = DateTime.UtcNow.AddHours(2)
+                Expiration = DateTime.UtcNow.AddHours(2),
+                IsAdmin = isAdminUser
             });
         } 
         #endregion

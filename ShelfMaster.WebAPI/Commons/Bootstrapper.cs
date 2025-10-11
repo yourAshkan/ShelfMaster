@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShelfMaster.Application.Commons;
@@ -79,14 +80,9 @@ public static class Bootstrapper
     #region Middlewares
     public static WebApplication UseApiMiddleware(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            app.UseDeveloperExceptionPage();
-        }
-
         app.UseHttpsRedirection();
+
+        app.UseDefaultFiles();
 
         app.UseStaticFiles();
 
